@@ -2,7 +2,7 @@ import { SortingState } from '@tanstack/react-table';
 import { useState } from 'react';
 import { SORT_TYPE } from '../contansts/constants';
 
-export function useSorting(initialField = 'id', initialOrder = SORT_TYPE.DESC) {
+export function useSorting(initialField = "", initialOrder = SORT_TYPE.DESC) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: initialField, desc: initialOrder === initialField },
   ]);

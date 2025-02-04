@@ -1,11 +1,7 @@
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
-  OnChangeFn,
-  PaginationState,
   RowData,
-  SortingState,
   useReactTable,
 } from '@tanstack/react-table';
 import CustomPagination from '../../custom-pagination/custom-pagination';
@@ -14,7 +10,8 @@ import TableBody from '../body/tankstack-table-body';
 import { BaseSearchModel } from '../../../models/class/model-base-search';
 import { useSorting } from '../../../hooks/use-sort';
 import { useEffect } from 'react';
-
+import { TableProvider } from '../../../context/tanstack-table/table-context';
+import './custom-tanstack-table.scss';
 interface IProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
@@ -56,9 +53,14 @@ function CustomTanStackTable<T>(props: IProps<T>) {
   return (
     <>
       <div className="overflow-x-auto w-full">
-        <table className="table-basic" style={{width: useTable.getTotalSize()}}>
-          <TableHeader useTable={useTable} />
-          <TableBody useTable={useTable} />
+        <table
+          className="table-basic"
+          style={{ width: useTable.getTotalSize() }}
+        >
+          <TableProvider tableState={useTable}>
+            <TableHeader />
+            <TableBody />
+          </TableProvider>
         </table>
       </div>
       {pagination && (

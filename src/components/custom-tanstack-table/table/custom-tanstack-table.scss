@@ -1,8 +1,8 @@
 .table-basic{
-    width: fit-content;
+    min-width: 100vw;
     height: 100%;
 }
-.table-basic thead tr {
+.table-basic thead tr th{
     text-align: left;
     background-color: #def4f5;
     font-size: 18px;
@@ -11,10 +11,15 @@
 .table-basic tbody tr td{
     padding: 15px 20px;
 }
-.table-basic tbody tr:nth-child(odd) {
+
+.table-basic tbody tr td {
+    background-color: #ffff;
+}
+
+.table-basic tbody tr:nth-child(odd) td {
     background-color: #f7f7f8;
 }
 
-.table-basic tbody tr:nth-child(even):hover {
+.table-basic tbody tr:nth-child(even):hover td {
     background-color: #f7f7f1;
 }
