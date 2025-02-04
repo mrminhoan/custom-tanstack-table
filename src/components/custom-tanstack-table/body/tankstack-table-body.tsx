@@ -12,7 +12,7 @@ function TableBody<T>(props: IProps<T>) {
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => {
               return (
-                <td key={cell.id}>
+                <td key={cell.id} style={{ width: cell.column.getSize() }}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               );

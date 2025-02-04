@@ -3,7 +3,7 @@ import "./tankstack-table-header.scss"
 interface IProps<T> {
   useTable: Table<T>;
 }
-function TableHeadder<T>(props: IProps<T>) {
+function TableHeader<T>(props: IProps<T>) {
   const { useTable } = props;
   return (
     <thead>
@@ -16,6 +16,7 @@ function TableHeadder<T>(props: IProps<T>) {
                 <th
                   key={header.id}
                   className={`${metaColumn?.sort ? 'cursor-pointer' : ''}`}
+                  style={{width: header.getSize()}}
                   onClick={
                     metaColumn?.sort
                       ? header.column.getToggleSortingHandler()
@@ -62,4 +63,4 @@ function TableHeadder<T>(props: IProps<T>) {
   );
 }
 
-export default TableHeadder;
+export default TableHeader;

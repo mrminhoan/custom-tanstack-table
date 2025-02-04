@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import CustomPagination from '../../custom-pagination/custom-pagination';
-import TableHeadder from '../header/tankstack-table-header';
+import TableHeader from '../header/tankstack-table-header';
 import TableBody from '../body/tankstack-table-body';
 import { BaseSearchModel } from '../../../models/class/model-base-search';
 import { useSorting } from '../../../hooks/use-sort';
@@ -30,16 +30,9 @@ declare module '@tanstack/react-table' {
   }
 }
 
-function CustomTankStackTable<T>(props: IProps<T>) {
+function CustomTanStackTable<T>(props: IProps<T>) {
   const { sorting, onSortingChange, order, key } = useSorting();
-  const {
-    data,
-    columns,
-    pagination,
-    total = 0,
-    onPageChange,
-    params,
-  } = props;
+  const { data, columns, pagination, total = 0, onPageChange, params } = props;
   const useTable = useReactTable({
     data,
     columns,
@@ -62,12 +55,12 @@ function CustomTankStackTable<T>(props: IProps<T>) {
 
   return (
     <>
-      <table className="table-basic" 
-      // style={{width: useTable.getCenterTotalSize(), overflowX:"auto"}}
-      >
-        <TableHeadder useTable={useTable} />
-        <TableBody useTable={useTable} />
-      </table>
+      <div className="overflow-x-auto w-full">
+        <table className="table-basic" style={{width: useTable.getTotalSize()}}>
+          <TableHeader useTable={useTable} />
+          <TableBody useTable={useTable} />
+        </table>
+      </div>
       {pagination && (
         <CustomPagination
           useTable={useTable}
@@ -80,4 +73,4 @@ function CustomTankStackTable<T>(props: IProps<T>) {
   );
 }
 
-export default CustomTankStackTable;
+export default CustomTanStackTable;

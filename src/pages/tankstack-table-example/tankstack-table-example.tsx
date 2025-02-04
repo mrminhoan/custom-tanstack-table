@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import './tanstack-table-example.scss';
-import CustomTankStackTable from '../../components/custom-tanstack-table/table/custom-tankstack-table';
+import CustomTanStackTable from '../../components/custom-tanstack-table/table/custom-tankstack-table';
 import { _SORT_TYPE } from '../../contansts/constants';
 import { useState } from 'react';
 import { getList } from '../../service/user-service';
@@ -20,6 +20,8 @@ function TableExample() {
       meta: {
         sort: true,
       },
+      size: 500, 
+
     },
     {
       accessorKey: 'lastName',
@@ -27,6 +29,8 @@ function TableExample() {
       meta: {
         sort: true,
       },
+      size: 500, 
+
     },
     {
       accessorKey: 'age',
@@ -34,14 +38,19 @@ function TableExample() {
       meta: {
         sort: true,
       },
+      size: 500, 
+
     },
     {
       accessorKey: 'email',
       header: 'Email',
+      size: 500, 
+
     },
     {
       accessorKey: 'phone',
       header: 'Phone',
+      size: 500, 
     },
   ];
 
@@ -63,7 +72,7 @@ function TableExample() {
   return (
     <div className="px-5 m-2 ">
       <CustomSpin loading={isLoading || isFetching}>
-        <CustomTankStackTable
+        <CustomTanStackTable
           columns={columns}
           data={data?.data?.data || []}
           total={data?.data?.total}
