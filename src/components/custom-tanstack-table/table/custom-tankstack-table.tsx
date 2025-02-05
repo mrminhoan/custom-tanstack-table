@@ -1,5 +1,7 @@
 import {
   ColumnDef,
+  ColumnPinningPosition,
+  ColumnPinningState,
   getCoreRowModel,
   RowData,
   useReactTable,
@@ -9,7 +11,7 @@ import TableHeader from '../header/tankstack-table-header';
 import TableBody from '../body/tankstack-table-body';
 import { BaseSearchModel } from '../../../models/class/model-base-search';
 import { useSorting } from '../../../hooks/use-sort';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TableProvider } from '../../../context/tanstack-table/table-context';
 import './custom-tanstack-table.scss';
 interface IProps<T> {
@@ -24,12 +26,18 @@ interface IProps<T> {
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     sort?: boolean;
+    pinned?: ColumnPinningPosition;
   }
 }
 
 function CustomTanStackTable<T>(props: IProps<T>) {
   const { sorting, onSortingChange, order, key } = useSorting();
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
+    left: [],
+    right: [],
+  });
   const { data, columns, pagination, total = 0, onPageChange, params } = props;
+
   const useTable = useReactTable({
     data,
     columns,
@@ -38,10 +46,27 @@ function CustomTanStackTable<T>(props: IProps<T>) {
     onSortingChange: onSortingChange,
     manualPagination: true,
     rowCount: total,
+    onColumnPinningChange: setColumnPinning,
     state: {
       sorting,
+      columnPinning: columnPinning,
     },
   });
+
+  useEffect(() => {
+    const pinned: ColumnPinningState = {
+      left: [],
+      right: [],
+    };
+    useTable.getLeafHeaders()?.map((header) => {
+      const meta = header?.column?.columnDef?.meta;
+      const column = header?.column;
+      if (meta?.pinned) {
+        pinned[meta.pinned].push(column?.id);
+      }
+    });
+    setColumnPinning(pinned);
+  }, []);
 
   useEffect(() => {
     onPageChange({
@@ -52,7 +77,10 @@ function CustomTanStackTable<T>(props: IProps<T>) {
 
   return (
     <>
-      <div className="overflow-x-auto w-full">
+      <div
+        className="overflow-x-auto w-full"
+        style={{ willChange: 'transform', overscrollBehavior:"contain" }} // fixed lag when scroll horizontal but still not working
+      >
         <table
           className="table-basic"
           style={{ width: useTable.getTotalSize() }}

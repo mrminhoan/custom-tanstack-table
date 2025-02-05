@@ -2,6 +2,7 @@ import { Column, flexRender, Table } from '@tanstack/react-table';
 import './tankstack-table-header.scss';
 import { useTableContext } from '../../../context/tanstack-table/table-context';
 import { getCommonPinningStyle } from '../../../utils';
+import { useCallback } from 'react';
 function TableHeader<T>() {
   const { tableState } = useTableContext<T>();
 
@@ -13,7 +14,13 @@ function TableHeader<T>() {
             {headerGroup.headers.map((header) => {
               const metaColumn = header.column.columnDef.meta;
               const { column } = header;
-
+              if (metaColumn?.pinned) {
+                // tableState.setColumnPinning("left");
+                // handlePinColumn(column, metaColumn.pinned)
+                // onPinning({
+                //   left: [column.id]
+                // })
+              }
               return (
                 <th
                   key={header.id}
@@ -26,19 +33,19 @@ function TableHeader<T>() {
                     <>
                       <div className="flex justify-between items-start">
                         {flexRender(
-                          header.column.columnDef.header,
+                          column.columnDef.header,
                           header.getContext(),
                         )}
                         <div
                           className={`${metaColumn?.sort ? 'cursor-pointer' : ''}`}
                           onClick={
                             metaColumn?.sort
-                              ? header.column.getToggleSortingHandler()
+                              ? column.getToggleSortingHandler()
                               : undefined
                           }
                         >
                           {metaColumn?.sort &&
-                            (header.column.getIsSorted() ? (
+                            (column.getIsSorted() ? (
                               ({
                                 asc: (
                                   <i
@@ -52,19 +59,19 @@ function TableHeader<T>() {
                                     aria-hidden="true"
                                   ></i>
                                 ),
-                              }[header.column.getIsSorted() as string] ?? null)
+                              }[column.getIsSorted() as string] ?? null)
                             ) : (
                               <i className="fa fa-sort" aria-hidden="true"></i>
                             ))}
                         </div>
                       </div>
-                      {!header.isPlaceholder && header.column.getCanPin() && (
+                      {/* {!header.isPlaceholder && column.getCanPin() && (
                         <div>
-                          {header.column.getIsPinned() !== 'left' ? (
+                          {column.getIsPinned() !== 'left' ? (
                             <button
                               className="border rounded px-2"
                               onClick={() => {
-                                header.column.pin('left');
+                                column.pin('left');
                               }}
                             >
                               {'<='}
@@ -73,18 +80,18 @@ function TableHeader<T>() {
                             <button
                               className="border rounded px-2"
                               onClick={() => {
-                                header.column.pin(false);
+                                column.pin(false);
                               }}
                             >
                               {'X'}
                             </button>
                           )}
 
-                          {header.column.getIsPinned() !== 'right' ? (
+                          {column.getIsPinned() !== 'right' ? (
                             <button
                               className="border rounded px-2"
                               onClick={() => {
-                                header.column.pin('right');
+                                column.pin('right');
                               }}
                             >
                               {'=>'}
@@ -93,14 +100,14 @@ function TableHeader<T>() {
                             <button
                               className="border rounded px-2"
                               onClick={() => {
-                                header.column.pin(false);
+                                column.pin(false);
                               }}
                             >
                               {'X'}
                             </button>
                           )}
                         </div>
-                      )}
+                      )} */}
                     </>
                   )}
                 </th>

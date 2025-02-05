@@ -19,8 +19,10 @@ function TableExample() {
         header: 'First Name',
         meta: {
           sort: true,
+          pinned: "left"
         },
-        size: 500,
+  
+        size: 350,
       },
       {
         accessorKey: 'lastName',
@@ -28,7 +30,7 @@ function TableExample() {
         meta: {
           sort: true,
         },
-        size: 500,
+        size: 350,
       },
       {
         accessorKey: 'age',
@@ -36,17 +38,20 @@ function TableExample() {
         meta: {
           sort: true,
         },
-        size: 500,
+        size: 350,
       },
       {
         accessorKey: 'email',
         header: 'Email',
-        size: 500,
+        size: 350,
       },
       {
         accessorKey: 'phone',
         header: 'Phone',
-        size: 500,
+        size: 350,
+        meta:{
+          pinned: "right"
+        }
       },
     ],
     [],

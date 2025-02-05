@@ -1,9 +1,10 @@
-import { Table } from '@tanstack/react-table';
+import { ColumnPinningState, Table } from '@tanstack/react-table';
 import React, { PropsWithChildren, useContext } from 'react';
 import _ from 'lodash';
 
 interface IPropsProvider<T> {
   tableState: Table<T>;
+  // onPinning: React.Dispatch<React.SetStateAction<ColumnPinningState>>;
 }
 
 const createTableContext = _.once(<T,>() =>
