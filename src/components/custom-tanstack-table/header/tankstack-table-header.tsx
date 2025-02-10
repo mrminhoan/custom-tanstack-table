@@ -2,10 +2,36 @@ import { Column, flexRender, Table } from '@tanstack/react-table';
 import './tankstack-table-header.scss';
 import { useTableContext } from '../../../context/tanstack-table/table-context';
 import { getCommonPinningStyle } from '../../../utils';
-import { useCallback } from 'react';
-function TableHeader<T>() {
+import CustomTableSort from '../custom-table-sort';
+import { ReactNode, useState } from 'react';
+import { BaseSearchModel } from '../../../models/class/model-base-search';
+import { useDebouncedCallback } from '@mantine/hooks';
+
+type TProps = {
+  onPageChange: (value: Partial<BaseSearchModel>) => void;
+};
+
+function TableHeader<T>(props: TProps) {
+  const { onPageChange } = props;
   const { tableState } = useTableContext<T>();
 
+  const [searchVisibility, setSearchVisibility] = useState<
+    Record<string, boolean>
+  >({});
+
+  const toggleSearch = (columnId: string) => {
+    setSearchVisibility((prev) => ({
+      [columnId]: !prev[columnId],
+    }));
+  };
+
+  const handleChangeSearch = useDebouncedCallback((e, keyword) => {
+    onPageChange({
+      filter: {
+        [keyword]: e.target.value,
+      },
+    });
+  }, 1000);
   return (
     <thead>
       {tableState.getHeaderGroups().map((headerGroup) => {
@@ -14,13 +40,6 @@ function TableHeader<T>() {
             {headerGroup.headers.map((header) => {
               const metaColumn = header.column.columnDef.meta;
               const { column } = header;
-              if (metaColumn?.pinned) {
-                // tableState.setColumnPinning("left");
-                // handlePinColumn(column, metaColumn.pinned)
-                // onPinning({
-                //   left: [column.id]
-                // })
-              }
               return (
                 <th
                   key={header.id}
@@ -36,78 +55,53 @@ function TableHeader<T>() {
                           column.columnDef.header,
                           header.getContext(),
                         )}
-                        <div
-                          className={`${metaColumn?.sort ? 'cursor-pointer' : ''}`}
-                          onClick={
-                            metaColumn?.sort
-                              ? column.getToggleSortingHandler()
-                              : undefined
-                          }
-                        >
-                          {metaColumn?.sort &&
-                            (column.getIsSorted() ? (
-                              ({
-                                asc: (
-                                  <i
-                                    className="fa fa-sort-asc"
-                                    aria-hidden="true"
-                                  ></i>
-                                ),
-                                desc: (
-                                  <i
-                                    className="fa fa-sort-desc"
-                                    aria-hidden="true"
-                                  ></i>
-                                ),
-                              }[column.getIsSorted() as string] ?? null)
-                            ) : (
-                              <i className="fa fa-sort" aria-hidden="true"></i>
-                            ))}
-                        </div>
-                      </div>
-                      {/* {!header.isPlaceholder && column.getCanPin() && (
-                        <div>
-                          {column.getIsPinned() !== 'left' ? (
-                            <button
-                              className="border rounded px-2"
-                              onClick={() => {
-                                column.pin('left');
-                              }}
+
+                        <div className="flex gap-5">
+                          {metaColumn?.sort && (
+                            <div
+                              className={'cursor-pointer'}
+                              onClick={
+                                metaColumn?.sort
+                                  ? column.getToggleSortingHandler()
+                                  : undefined
+                              }
                             >
-                              {'<='}
-                            </button>
-                          ) : (
-                            <button
-                              className="border rounded px-2"
-                              onClick={() => {
-                                column.pin(false);
-                              }}
-                            >
-                              {'X'}
-                            </button>
+                              {metaColumn?.renderSort ? (
+                                metaColumn?.renderSort
+                              ) : (
+                                <CustomTableSort column={column} />
+                              )}
+                            </div>
                           )}
 
-                          {column.getIsPinned() !== 'right' ? (
-                            <button
-                              className="border rounded px-2"
-                              onClick={() => {
-                                column.pin('right');
-                              }}
+                          {metaColumn?.canSearch && (
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => toggleSearch(header.id)}
                             >
-                              {'=>'}
-                            </button>
-                          ) : (
-                            <button
-                              className="border rounded px-2"
-                              onClick={() => {
-                                column.pin(false);
-                              }}
-                            >
-                              {'X'}
-                            </button>
+                              {metaColumn?.renderSearch ? (
+                                metaColumn?.renderSearch
+                              ) : (
+                                <i
+                                  className="fa fa-search"
+                                  aria-hidden="true"
+                                ></i>
+                              )}
+                            </div>
                           )}
                         </div>
-                      )} */}
+                      </div>
+
+                      {searchVisibility[header.id] && (
+                        <div className="mt-2">
+                          <input
+                            type="text"
+                            className="border p-1 w-full"
+                            placeholder="Search..."
+                            onChange={(e) => handleChangeSearch(e, header.id)}
+                          />
+                        </div>
+                      )}
                     </>
                   )}
                 </th>

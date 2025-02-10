@@ -19,16 +19,19 @@ function TableExample() {
         header: 'First Name',
         meta: {
           sort: true,
-          pinned: "left"
+          pinned: 'left',
+          canSearch: true,
         },
-  
         size: 350,
+        // accessorFn: (value) => console.log(value)
       },
       {
         accessorKey: 'lastName',
         header: 'Last Name',
         meta: {
           sort: true,
+          canSearch: true,
+
         },
         size: 350,
       },
@@ -49,9 +52,9 @@ function TableExample() {
         accessorKey: 'phone',
         header: 'Phone',
         size: 350,
-        meta:{
-          pinned: "right"
-        }
+        meta: {
+          pinned: 'right',
+        },
       },
     ],
     [],

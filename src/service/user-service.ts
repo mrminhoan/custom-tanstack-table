@@ -8,13 +8,14 @@ import { BaseSearchModel } from '../models/class/model-base-search';
 export const getList = (
   params: Partial<BaseSearchModel>,
 ): Promise<AxiosResponse<{ data: UserModel[]; total: number }>> => {
+  console.log(params)
   return axiosInstance
     .get(APIS.USER.LIST, {
       params: {
         limit: params?.limit,
         skip: params?.offset,
         sortBy: params?.sortBy,
-        order: params?.sortType?.toLowerCase()
+        order: params?.sortType?.toLowerCase(),
       },
     })
     .then((res) => {

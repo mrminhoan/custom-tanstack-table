@@ -8,5 +8,6 @@ export class BaseSearchModel {
   keyword: string | null = null;
   sortType: TOrderType = SORT_TYPE.ASC;
   showPage: number = 1;
-  sortBy: string = ""
+  sortBy: string = "";
+  filter: Record<string, string>
 }

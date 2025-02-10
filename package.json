@@ -15,6 +15,7 @@
     "@tanstack/react-table": "^8.20.6",
     "@types/lodash": "^4.17.15",
     "axios": "^1.7.9",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

@@ -11,7 +11,7 @@ import TableHeader from '../header/tankstack-table-header';
 import TableBody from '../body/tankstack-table-body';
 import { BaseSearchModel } from '../../../models/class/model-base-search';
 import { useSorting } from '../../../hooks/use-sort';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { TableProvider } from '../../../context/tanstack-table/table-context';
 import './custom-tanstack-table.scss';
 interface IProps<T> {
@@ -27,6 +27,9 @@ declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     sort?: boolean;
     pinned?: ColumnPinningPosition;
+    renderSort?: ReactNode;
+    canSearch?: boolean;
+    renderSearch?: boolean;
   }
 }
 
@@ -36,7 +39,14 @@ function CustomTanStackTable<T>(props: IProps<T>) {
     left: [],
     right: [],
   });
-  const { data, columns, pagination, total = 0, onPageChange, params } = props;
+  const {
+    data,
+    columns,
+    pagination,
+    total = 0,
+    onPageChange,
+    params,
+  } = props;
 
   const useTable = useReactTable({
     data,
@@ -79,14 +89,13 @@ function CustomTanStackTable<T>(props: IProps<T>) {
     <>
       <div
         className="overflow-x-auto w-full"
-        style={{ willChange: 'transform', overscrollBehavior:"contain" }} // fixed lag when scroll horizontal but still not working
       >
         <table
           className="table-basic"
           style={{ width: useTable.getTotalSize() }}
         >
           <TableProvider tableState={useTable}>
-            <TableHeader />
+            <TableHeader onPageChange={onPageChange}/>
             <TableBody />
           </TableProvider>
         </table>
